@@ -8,7 +8,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import styles from './dashboard.module.css'
+//import './dashboard.module.css'
 async function getBeehives() {
     const API_URL =  process.env.API_BEEHIVE_URL
     const username = cookies().get('username')
@@ -44,34 +45,27 @@ export default async function DashBoard() {
     }
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-        <div className="w-full p-6 bg-white rounded-md shadow-md lg:max-w-max m-4">
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                <TableRow>
-                    <TableCell align="right">Nombre</TableCell>
-                    <TableCell align="right">Identificador&nbsp;</TableCell>
-                    <TableCell align="right">Provincia&nbsp;</TableCell>
-                    <TableCell align="right">Municipio&nbsp;</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                {beehives.map((row) => (
-                    <TableRow
-                    key={row.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                    <TableCell component="th" scope="row">
-                        {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.identifier}</TableCell>
-                    <TableCell align="right">{row.location_provincia}</TableCell>
-                    <TableCell align="right">{row.location_municipio}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-            </TableContainer>
+        <div className="w-full p-6 bg-gray-800 rounded-md shadow-md lg:max-w-max m-4">
+            <table className={styles.table}>
+                <thead className={styles.thead}>
+                    <tr>
+                        <th align="left">Nombre</th>
+                        <th align="left">Identificador&nbsp;</th>
+                        <th align="left">Provincia&nbsp;</th>
+                        <th align="left">Municipio&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {beehives.map((row) => (
+                        <tr key={row.id}>
+                        <td>{row.name}</td>
+                        <td>{row.identifier}</td>
+                        <td>{row.location_provincia}</td>
+                        <td>{row.location_municipio}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
         </div>
       );
