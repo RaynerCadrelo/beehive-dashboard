@@ -14,9 +14,6 @@ export async function login(formData: FormData) {
     })
     const token = await response.json()
     console.log(token)
-    // Clear cookies
-    cookies().delete('jwt')
-    cookies().delete('username')
     // Save the session in a cookie
     cookies().set('jwt', token['access_token'], {
         maxAge: 60 * 15, // 15 minutes in seconds
