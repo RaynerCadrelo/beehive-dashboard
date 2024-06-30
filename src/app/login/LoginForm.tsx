@@ -1,10 +1,21 @@
 import { redirect } from 'next/navigation'
-import { login } from "../lib/auth";
-import { NextRequest } from 'next/server'
-
+import { getToken } from '../lib/fetch';
+import { setCookies } from '../lib/cookies'
 import Link from "next/link";
 
-export function LoginForm(request: NextRequest){
+async function login(formData: FormData) {
+    // Create the session
+    const API_TOKEN_URL =  process.env.API_TOKEN_URL as string
+    const response = await getToken(API_TOKEN_URL, formData)
+    if(response.status != 200)
+        redirect("/login")  // implement fail authenticate
+    const token = await response.json()
+    // Save the session in a cookie
+    setCookies('jwt', token['access_token'])
+    setCookies('username', formData.get('username') as string)
+}
+
+export function LoginForm(){
     return (
         <form className="mt-6" action={async (formData) => {
             "use server"

@@ -1,7 +1,6 @@
 'use client'
 
-
-export function CopyButton({ text }){
+export function ButtonCopy({ text }: {text: string}){
     return (
         <button title="Copiar identificador" className="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-200 hover:bg-gray-200/10 active:bg-gray-200/20" type="button" onClick={() =>{'use client'; navigator.clipboard.writeText(text)}}>
             <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
