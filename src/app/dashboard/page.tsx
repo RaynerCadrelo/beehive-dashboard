@@ -1,25 +1,19 @@
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import React from "react";
-import { ButtonCopy } from './components/CopyButton'
-import { Beehive } from "../types";
-import { getItems } from "../lib/fetch";
+import { ButtonCopy } from './components/ButtonCopy'
 import Link from "next/link";
+import { getBeehives } from "../service/item/beehive"
+import { redirect } from "next/navigation";
 
-async function getBeehives() {
-    const API_URL =  process.env.API_BEEHIVE_URL as string
-    const username = cookies().get('username')
-    if (username == undefined)
-        redirect("/")
-    return await getItems(API_URL, {username_owner: username.value, limit: 1000, desc: false})
-}
 
 export default async function DashBoard() {
-    const beehives: Array<Beehive>|undefined = await getBeehives()
+    const beehives = await getBeehives()
     if (beehives === undefined){
+        redirect("/logout")
+    }
+    if (beehives.length == 0){
         return(
             <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-                <div>Data no found</div>
+                <div>Usurio sin colmenas</div>
             </div>
         )
     }

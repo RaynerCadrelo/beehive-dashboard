@@ -1,16 +1,15 @@
-import { getItems } from "@/app/lib/fetch"
 import { Measurement } from "@/app/types"
 import Link from "next/link"
-
-async function getMeasurements(identifier: string) {
-    const API_URL =  process.env.API_MEASUREMENT_URL as string
-    return await getItems(API_URL, {identifier_beehive: identifier, limit: 10})
-}
+import { getMeasurements } from "@/app/service/item/measurement"
+import { logoutSession } from "@/app/logout/logout"
 
 export default async function BeehivePage({ params }: {params: {identifier: string}}){
     const {identifier} = params
-    const items: Array<Measurement> = await getMeasurements(identifier)
-    if (items.length == 0){
+    const items: Array<Measurement>|undefined = await getMeasurements(identifier)
+    if (items == undefined){
+        await logoutSession()
+    }
+    if (items?.length == 0){
         return(
             <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
                 <div>Colmenas sin mediciones registradas.</div>
@@ -30,7 +29,7 @@ export default async function BeehivePage({ params }: {params: {identifier: stri
                         </tr>
                     </thead>
                     <tbody>
-                        {items.map((row) => (
+                        {items?.map((row) => (
                             <tr key={row.id}>
                                 <td align="center" className="py-2 px-2">{row.datetime.split("T").join(" ")}</td>
                                 <td align="center" className="py-2 px-2">{(row.temperature/100).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</td>
